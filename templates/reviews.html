@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ place.name }} 후기</title>
+  <style>
+    .star { color: gold; }
+    .review { border-bottom: 1px solid #ddd; padding: 1em 0; }
+    .actions { font-size: 0.9em; }
+  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <h1>{{ place.name }} 후기</h1>
+
+  <!-- 평균 별점 -->
+  <p>평균 별점:
+    {% if avg_rating %}
+      <span class="star">{{ "%.1f"|format(avg_rating) }}</span> / 5.0
+    {% else %}
+      등록된 별점이 없습니다.
+    {% endif %}
+  </p>
+
+<!-- 후기 작성 폼 -->
+<section id="new-review">
+  <h2>새 후기 작성</h2>
+  <form method="post" action="{{ url_for('place_reviews', place_id=place.place_id) }}">
+    <label for="rating">별점:</label>
+    <select name="rating" id="rating" required>
+      {% for r in [0,0.5,1,1.5,2,2.5,3,3.5,4,4.5,5] %}
+        <option value="{{ r }}">{{ "%.1f"|format(r) }}</option>
+      {% endfor %}
+    </select>
+    <br>
+    <label for="content">내용:</label><br>
+    <textarea name="content" id="content" rows="4" cols="50" required></textarea><br>
+    <button type="submit">등록</button>
+    <hr style="margin: 40px 0;">  
+  </form>
+</section>
+
+  <!-- 후기 목록 -->
+  <section id="reviews">
+    <h2>작성된 후기 ({{ reviews|length }}건)</h2>
+    {% for r in reviews %}
+      <div class="review">
+        <p>
+          <strong>{{ r.user.username }}</strong>
+          <span>· {{ r.created_at.strftime("%Y-%m-%d") }}</span>
+        </p>
+        <p>별점: <span class="star">{{ "%.1f"|format(r.rating) }}</span></p>
+        <p>{{ r.content }}</p>
+        {% if r.user_id == session.get('user_id') %}
+          <div class="actions">
+            <a href="{{ url_for('edit_review', review_id=r.review_id) }}">수정</a> |
+            <a href="{{ url_for('delete_review', review_id=r.review_id) }}" 
+               onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+          </div>
+        {% endif %}
+      </div>
+    {% else %}
+      <p>아직 등록된 후기가 없습니다.</p>
+    {% endfor %}
+  </section>
+
+  <p><a href="{{ url_for('place_detail', place_id=place.place_id) }}">← 매장 상세로 돌아가기</a></p>
+  <p><a href="{{ url_for('home') }}">← 홈으로 돌아가기</a></p>
+</body>
+</html>

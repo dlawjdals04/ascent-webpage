@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ place.name }} 상세정보</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <h1>{{ place.name }}</h1>
+  <div class="place-card">
+  <div class="summary">
+    <div class="label">카테고리:</div> {{ place.category.name }}<br>
+    <div class="label">주소:</div> {{ place.address }}
+  </div>
+
+  <h2>🕒 영업시간</h2>
+  <ul class="hours">
+    {% for h in hours %}
+      <li>{{ h.day_of_week }}: {{ h.open_time }} ~ {{ h.close_time }}</li>
+    {% endfor %}
+  </ul>
+
+  <h2>💬 후기</h2>
+  {% if reviews %}
+    <ul class="reviews">
+      {% for r in reviews %}
+        <li>
+          <span class="rating">★ {{ "%.1f"|format(r.rating) }}</span> / {{ r.created_at.strftime("%Y-%m-%d") }}<br>
+          {{ r.content }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="empty">아직 등록된 후기가 없습니다.</p>
+  {% endif %}
+
+  <p><a href="{{ url_for('place_reviews', place_id= place.place_id) }}">← 리뷰 작성하기</a></p>
+
+  <p><a href="{{ url_for('home') }}">← 홈으로 돌아가기</a></p>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+{% if errors %}
+  <ul style="color: red;">
+    {% for e in errors %}
+      <li>{{ e }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>회원가입</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <h1>회원가입</h1>
+  <form method="post">
+
+    <div class="login-info-box">
+    <input type="text"     name="username" placeholder="아이디" required><br>
+    <input type="email"    name="email"    placeholder="이메일" required><br>
+    <input type="password" name="password" placeholder="비밀번호" required><br>
+    <button type="submit"  class="center-btn">가입하기</button>
+
+   <div style="text-align: left; margin-bottom: 24px;">
+      <a href="{{ url_for('home') }}" style="color: #007BFF; font-size: 14px; font-weight: bold; text-decoration: none;">
+        ← 돌아가기
+       </a>
+  </div>
+
+</div>
+</form>
+  
+</body>
+</html>

@@ -1,0 +1,205 @@
+/* 전체 페이지 배경과 기본 폰트 설정 */
+body {
+  background-color: #fdfdf5;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 2em;
+}
+
+/* 중앙 박스 컨테이너 */
+.container {
+  max-width: 500px;
+  margin: 5em auto;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 2em;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 6px;
+}
+
+/* 박스 내부 입력창 스타일 */
+.box input[type="text"],
+.box input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin: 0.5em 0;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* 버튼 기본 스타일 */
+.box button,
+button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 1em;
+  background-color: #e0e0e0;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.box button:hover,
+button:hover {
+  background-color: #d5d5d5;
+}
+
+/* 필터 영역 여백 */
+.filter {
+  margin-top: 1.5em;
+}
+
+/* 제목 스타일 */
+h1 {
+  text-align: center;
+  color: #2c3e50;
+}
+
+h2, h3 {
+  margin-top: 0;
+  color: #222;
+}
+
+/* 링크 스타일 */
+a {
+  display: inline-block;
+  margin-top: 1em;
+  color: #007BFF;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* 오류 메시지 */
+.error {
+  color: red;
+  margin-bottom: 1em;
+}
+
+/* 문단 텍스트 */
+p {
+  color: grey;
+  font-size: 16px;
+  margin-bottom: 1.5em;
+}
+
+/* 장소 항목 스타일 */
+.place-item {
+  margin-bottom: 1em;
+}
+
+/* 별점 스타일 */
+.star {
+  color: gold;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 70%;
+  padding: 12px;
+   margin: 1em auto;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 16px;
+  cursor: pointer;
+  display: block;
+}
+
+.center-btn {
+  display: block;
+  width: 70%;
+  margin: 1em auto;
+  padding: 12px;
+  background-color: #e0e0e0;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.login-info-box {
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  padding: 1em 1.5em;
+  border-radius: 6px;
+  margin-bottom: 1.5em;
+  font-size: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+.login-info-box h3 {
+  margin: 0 0 0.5em 0;
+}
+.login-info-box p {
+  margin: 0.2em 0;
+}
+.login-info-box a {
+  display: inline-block;
+  margin-top: 0.5em;
+  color: #007BFF;
+  font-weight: bold;
+  text-decoration: none;
+}
+.login-info-box a:hover {
+  text-decoration: underline;
+}
+
+/* place-detail 페이지 */
+.place-card {
+  background-color: #f9f9f9;
+  padding: 2em;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  max-width: 700px;
+  margin: 0 auto;
+  font-size: 16px;
+}
+
+.summary {
+  background: #f1f1f5;
+  padding: 1em 1.5em;
+  border-left: 5px solid #007BFF;
+  border-radius: 6px;
+  margin-bottom: 2em;
+  line-height: 1.6;
+}
+
+.label {
+  font-weight: bold;
+  display: inline-block;
+  margin-right: 0.5em;
+}
+
+.hours, .reviews {
+  list-style: none;
+  padding-left: 0;
+}
+
+.hours li,
+.reviews li {
+  padding: 0.5em 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.rating {
+  color: gold;
+  font-weight: bold;
+}
+
+.empty {
+  color: gray;
+  font-style: italic;
+  margin-top: 1em;
+}
+
+a {
+  display: inline-block;
+  margin-top: 1em;
+  color: #007BFF;
+}
