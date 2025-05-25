@@ -12,7 +12,7 @@ import os, urllib.parse, re, time
 import bcrypt
 
 application = Flask(__name__)
-application.secret_key = os.getenv("SECRET_KEY", "임시_비밀키")
+application.secret_key = os.getenv("SECRET_KEY")
 
 DB_USER = os.getenv("DB_USER", "playmate")
 DB_PW   = os.getenv("DB_PW", "AppPass2025!")
