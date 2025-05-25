@@ -14,10 +14,10 @@ import bcrypt
 application = Flask(__name__)
 application.secret_key = os.getenv("SECRET_KEY")
 
-DB_USER = os.getenv("DB_USER", "playmate")
-DB_PW   = os.getenv("DB_PW", "AppPass2025!")
-DB_HOST = os.getenv("DB_HOST", "localhost")
-DB_NAME = os.getenv("DB_NAME", "playmate_db")
+DB_USER = os.getenv("DB_USER")
+DB_PW   = os.getenv("DB_PW")
+DB_HOST = os.getenv("DB_HOST")
+DB_NAME = os.getenv("DB_NAME")
 pw_quoted = urllib.parse.quote_plus(DB_PW)
 
 application.config['SQLALCHEMY_DATABASE_URI']      = (
