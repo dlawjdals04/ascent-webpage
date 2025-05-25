@@ -18,6 +18,10 @@ DB_USER = os.getenv("DB_USER")
 DB_PW   = os.getenv("DB_PW")
 DB_HOST = os.getenv("DB_HOST")
 DB_NAME = os.getenv("DB_NAME")
+
+DB_PW = os.getenv("DB_PW", "")
+if not DB_PW:
+    raise ValueError("DB_PW 환경변수가 설정되지 않았습니다.")
 pw_quoted = urllib.parse.quote_plus(DB_PW)
 
 application.config['SQLALCHEMY_DATABASE_URI']      = (
