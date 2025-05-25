@@ -24,10 +24,10 @@ if not DB_PW:
     raise ValueError("DB_PW 환경변수가 설정되지 않았습니다.")
 pw_quoted = urllib.parse.quote_plus(DB_PW)
 
-application.config['SQLALCHEMY_DATABASE_URI']      = (
-    f"mysql+pymysql://{DB_USER}:{pw_quoted}@{DB_HOST}/{DB_NAME}"
-    "?charset=utf8mb4"
+application.config['SQLALCHEMY_DATABASE_URI'] = (
+    f"postgresql+psycopg2://{DB_USER}:{DB_PW}@{DB_HOST}/{DB_NAME}"
 )
+
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(application)
