@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Enum, func  
+from sqlalchemy import Enum as PgEnum, func 
 
 db = SQLAlchemy()
 
@@ -29,7 +29,9 @@ class OperatingHours(db.Model):
     __tablename__ = 'operatinghours'
     id          = db.Column(db.Integer, primary_key=True, autoincrement=True)
     place_id    = db.Column(db.Integer, db.ForeignKey('place.place_id'))
-    day_of_week = db.Column(Enum('MON','TUE','WED','THU','FRI','SAT','SUN'))
+    day_of_week = db.Column(
+     PgEnum('MON','TUE','WED','THU','FRI','SAT','SUN', name='dayofweek_enum')
+    )
     open_time   = db.Column(db.Time)
     close_time  = db.Column(db.Time)
     is_closed   = db.Column(db.Boolean, default=False)
