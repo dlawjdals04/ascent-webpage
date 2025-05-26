@@ -30,18 +30,6 @@ application.config['SQLALCHEMY_DATABASE_URI'] = (
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(application)
 
-@application.route("/fix-sequence")
-def fix_sequence():
-    try:
-        db.session.execute(
-            "SELECT setval(pg_get_serial_sequence('review', 'review_id'), MAX(review_id)) FROM review"
-        )
-        db.session.commit()
-        return "✅ review_id 시퀀스 재설정 완료!"
-    except Exception as e:
-        import traceback
-        return f"<pre>{traceback.format_exc()}</pre>", 500
-
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
