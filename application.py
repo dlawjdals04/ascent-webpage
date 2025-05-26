@@ -56,9 +56,18 @@ def import_data():
     try:
         from models import db, User, Place, Category, Review, OperatingHours
 
+        # ✅ 기존 데이터 전부 삭제 (초기화용)
+        db.session.query(Review).delete()
+        db.session.query(OperatingHours).delete()
+        db.session.query(Place).delete()
+        db.session.query(Category).delete()
+        db.session.query(User).delete()
+        db.session.commit()
+
+        # ✅ CSV 폴더 경로 설정
         base_path = os.path.join(os.path.dirname(__file__), "data")
 
-        # 1. 카테고리
+        # ✅ 1. 카테고리 삽입
         with open(os.path.join(base_path, "category.csv"), encoding="utf-8") as f:
             for row in csv.DictReader(f):
                 db.session.add(Category(
@@ -66,7 +75,7 @@ def import_data():
                     name=row["name"]
                 ))
 
-        # 2. 장소
+        # ✅ 2. 장소 삽입
         with open(os.path.join(base_path, "place.csv"), encoding="utf-8") as f:
             for row in csv.DictReader(f):
                 db.session.add(Place(
@@ -76,7 +85,7 @@ def import_data():
                     category_id=int(row["category_id"])
                 ))
 
-        # 3. 사용자
+        # ✅ 3. 사용자 삽입
         with open(os.path.join(base_path, "user.csv"), encoding="utf-8") as f:
             for row in csv.DictReader(f):
                 db.session.add(User(
@@ -87,7 +96,7 @@ def import_data():
                     is_admin=row["is_admin"].lower() in ["true", "1", "yes"]
                 ))
 
-        # 4. 후기
+        # ✅ 4. 후기 삽입
         with open(os.path.join(base_path, "review.csv"), encoding="utf-8") as f:
             for row in csv.DictReader(f):
                 db.session.add(Review(
@@ -98,7 +107,7 @@ def import_data():
                     content=row["content"]
                 ))
 
-        # 5. 영업시간
+        # ✅ 5. 영업시간 삽입
         with open(os.path.join(base_path, "operatinghours.csv"), encoding="utf-8") as f:
             for row in csv.DictReader(f):
                 db.session.add(OperatingHours(
@@ -110,6 +119,7 @@ def import_data():
                     is_closed=row["is_closed"].lower() in ["true", "1", "yes"]
                 ))
 
+        # ✅ 실제 DB 반영
         db.session.commit()
         return "📦 CSV 데이터 import 완료!"
     
