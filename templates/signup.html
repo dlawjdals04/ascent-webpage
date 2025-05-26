@@ -13,8 +13,7 @@
     <input type="text"     name="username" placeholder="아이디" required><br>
     <input type="email"    name="email"    placeholder="이메일" required><br>
     <input type="password" name="password" placeholder="비밀번호" required><br>
-    <button type="submit"  class="center-btn">가입하기</button>
-
+    
     {% if errors %}
       <ul style="color: red;">
     {% for e in errors %}
@@ -22,6 +21,8 @@
     {% endfor %}
       </ul>
     {% endif %}
+    
+    <button type="submit"  class="center-btn">가입하기</button>
 
    <div style="background:#f5f5f5; padding:30px; border-radius:8px; max-width:480px; margin:auto;">
       <a href="{{ url_for('home') }}" style="color: #007BFF; font-size: 14px; font-weight: bold; text-decoration: none;">
