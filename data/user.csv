@@ -1,0 +1,2 @@
+user_id,username,email,password,is_admin,created_at
+1,yujin,yujin@example.com,pw1234,0,"2025-05-26 15:17:38"
