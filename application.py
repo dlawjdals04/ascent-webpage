@@ -115,10 +115,9 @@ def home():
         try:
             locale.setlocale(locale.LC_ALL, "ko_KR.UTF-8")
         except locale.Error:
-            locale.setlocale(locale.LC_ALL, "")  # 실패 시 기본 로케일
+            locale.setlocale(locale.LC_ALL, '')
 
         places.sort(key=lambda p: locale.strxfrm(p.name))
-
     else:
         query = query.order_by(db.desc("avg_rating"))
         places = query.all()
