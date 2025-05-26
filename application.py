@@ -8,7 +8,7 @@ from datetime import datetime
 from functools import wraps
 from markupsafe import escape 
 
-import os, urllib.parse, re, time, csv, traceback
+import os, urllib.parse, re, time, csv, locale
 import bcrypt
       
 application = Flask(__name__)
@@ -110,11 +110,18 @@ def home():
 
     # 정렬
     if sort == "name":
-        query = query.order_by(Place.name.asc())
+        places = query.all()
+
+        try:
+            locale.setlocale(locale.LC_ALL, "ko_KR.UTF-8")
+        except locale.Error:
+            locale.setlocale(locale.LC_ALL, "")  # 실패 시 기본 로케일
+
+        places.sort(key=lambda p: locale.strxfrm(p.name))
+
     else:
         query = query.order_by(db.desc("avg_rating"))
-
-    places = query.all()
+        places = query.all()
 
     return render_template(
         "home.html",
