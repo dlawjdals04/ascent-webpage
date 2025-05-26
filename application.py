@@ -41,6 +41,17 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+@application.route("/initdb")
+def init_db():
+    if os.environ.get("FLASK_ENV") != "production":
+        return "운영 환경에서 이 URL은 사용할 수 없습니다.", 403
+    try:
+        db.create_all()
+        return "✅ 데이터베이스 초기화 완료!"
+    except Exception as e:
+        return f"❌ 오류 발생: {e}", 500
+
+
 @application.route("/signup", methods=["GET", "POST"])
 def signup():
     if request.method == "POST":
