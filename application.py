@@ -8,7 +8,7 @@ from datetime import datetime
 from functools import wraps
 from markupsafe import escape 
 
-import os, urllib.parse, re, time, csv
+import os, urllib.parse, re, time, csv, traceback
 import bcrypt
       
 application = Flask(__name__)
@@ -53,65 +53,68 @@ import csv
 
 @application.route("/import")
 def import_data():
-    if os.environ.get("FLASK_ENV") != "production":
-        return "운영 환경에서 비활성화됨", 403
+    try:
+        from models import db, User, Place, Category, Review, OperatingHours
 
-    from models import db, User, Place, Category, Review, OperatingHours
+        base_path = os.path.join(os.path.dirname(__file__), "data")
 
-    # ✅ 여기 위치가 좋습니다!
-    base_path = os.path.join(os.path.dirname(__file__), "data")
+        # 1. 카테고리
+        with open(os.path.join(base_path, "category.csv"), encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                db.session.add(Category(
+                    category_id=int(row["category_id"]),
+                    name=row["name"]
+                ))
 
-    # 1. 카테고리
-    with open(os.path.join(base_path, "category.csv"), encoding="utf-8") as f:
-        for row in csv.DictReader(f):
-            db.session.add(Category(category_id=row["category_id"], name=row["name"]))
+        # 2. 장소
+        with open(os.path.join(base_path, "place.csv"), encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                db.session.add(Place(
+                    place_id=int(row["place_id"]),
+                    name=row["name"],
+                    address=row["address"],
+                    category_id=int(row["category_id"])
+                ))
 
-    # 2. 장소
-    with open(os.path.join(base_path, "place.csv"), encoding="utf-8") as f:
-        for row in csv.DictReader(f):
-            db.session.add(Place(
-                place_id=row["place_id"],
-                name=row["name"],
-                address=row["address"],
-                category_id=row["category_id"]
-            ))
+        # 3. 사용자
+        with open(os.path.join(base_path, "user.csv"), encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                db.session.add(User(
+                    user_id=int(row["user_id"]),
+                    username=row["username"],
+                    email=row["email"],
+                    password=row["password"],
+                    is_admin=row["is_admin"].lower() in ["true", "1", "yes"]
+                ))
 
-    # 3. 사용자
-    with open(os.path.join(base_path, "user.csv"), encoding="utf-8") as f:
-        for row in csv.DictReader(f):
-            db.session.add(User(
-                user_id=row["user_id"],
-                username=row["username"],
-                email=row["email"],
-                password=row["password"],
-                is_admin=row["is_admin"] == "true"
-            ))
+        # 4. 후기
+        with open(os.path.join(base_path, "review.csv"), encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                db.session.add(Review(
+                    review_id=int(row["review_id"]),
+                    place_id=int(row["place_id"]),
+                    user_id=int(row["user_id"]),
+                    rating=float(row["rating"]),
+                    content=row["content"]
+                ))
 
-    # 4. 후기
-    with open(os.path.join(base_path, "review.csv"), encoding="utf-8") as f:
-        for row in csv.DictReader(f):
-            db.session.add(Review(
-                review_id=row["review_id"],
-                place_id=row["place_id"],
-                user_id=row["user_id"],
-                rating=row["rating"],
-                content=row["content"]
-            ))
+        # 5. 영업시간
+        with open(os.path.join(base_path, "operatinghours.csv"), encoding="utf-8") as f:
+            for row in csv.DictReader(f):
+                db.session.add(OperatingHours(
+                    id=int(row["id"]),
+                    place_id=int(row["place_id"]),
+                    day_of_week=row["day_of_week"],
+                    open_time=row["open_time"],
+                    close_time=row["close_time"],
+                    is_closed=row["is_closed"].lower() in ["true", "1", "yes"]
+                ))
 
-    # 5. 영업시간
-    with open(os.path.join(base_path, "operatinghours.csv"), encoding="utf-8") as f:
-        for row in csv.DictReader(f):
-            db.session.add(OperatingHours(
-                id=row["id"],
-                place_id=row["place_id"],
-                day_of_week=row["day_of_week"],
-                open_time=row["open_time"],
-                close_time=row["close_time"],
-                is_closed=row["is_closed"] == "true"
-            ))
-
-    db.session.commit()
-    return "📦 CSV 데이터 import 완료!"
+        db.session.commit()
+        return "📦 CSV 데이터 import 완료!"
+    
+    except Exception as e:
+        return f"<h3>❌ 오류 발생</h3><pre>{traceback.format_exc()}</pre>", 500
 
 @application.route("/signup", methods=["GET", "POST"])
 def signup():
