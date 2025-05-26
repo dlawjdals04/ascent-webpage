@@ -11,25 +11,26 @@ from markupsafe import escape
 import os, urllib.parse, re, time
 import bcrypt
 
+import os
+from dotenv import load_dotenv
+      
 application = Flask(__name__)
 application.secret_key = os.getenv("SECRET_KEY")
 
-DB_USER = os.getenv("DB_USER")
-DB_PW   = os.getenv("DB_PW")
-DB_HOST = os.getenv("DB_HOST")
-DB_NAME = os.getenv("DB_NAME")
-
-DB_PW = os.getenv("DB_PW", "")
-if not DB_PW:
-    raise ValueError("DB_PW 환경변수가 설정되지 않았습니다.")
-pw_quoted = urllib.parse.quote_plus(DB_PW)
+DB_USER = os.environ.get("DB_USER")
+DB_PW   = os.environ.get("DB_PW")
+DB_HOST = os.environ.get("DB_HOST")
+DB_NAME = os.environ.get("DB_NAME")
 
 application.config['SQLALCHEMY_DATABASE_URI'] = (
     f"postgresql+psycopg2://{DB_USER}:{DB_PW}@{DB_HOST}/{DB_NAME}"
 )
+#DB_PW = os.getenv("DB_PW", "")
+#if not DB_PW:
+#    raise ValueError("DB_PW 환경변수가 설정되지 않았습니다.")
+#pw_quoted = urllib.parse.quote_plus(DB_PW)
 
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
 db.init_app(application)
 
 def login_required(f):
