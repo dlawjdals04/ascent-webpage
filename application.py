@@ -294,7 +294,7 @@ def edit_review(review_id):
             url_for("place_reviews", place_id=review.place_id)
         )
 
-    return render_template("review.html", review=review)
+    return render_template("reviews.html", review=review)
 
 @application.route("/reviews/<int:review_id>/delete")
 @login_required
