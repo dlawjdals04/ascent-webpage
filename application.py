@@ -231,13 +231,23 @@ def place_detail(place_id):
 )
 @login_required
 def place_reviews(place_id):
-    if request.method == "POST":
-        rating  = float(request.form["rating"])
-        content = request.form["content"]
-        user_id = session["user_id"]
-        content = request.form["content"].strip()
+    place = Place.query.get_or_404(place_id)
+    reviews = (
+        Review.query
+        .filter_by(place_id=place_id)
+        .order_by(Review.created_at.desc())
+        .all()
+    )
+    avg = (
+        db.session.query(db.func.avg(Review.rating))
+        .filter(Review.place_id == place_id)
+        .scalar()
+    ) or 0
 
-        content = escape(content.strip())
+    if request.method == "POST":
+        rating = float(request.form["rating"])
+        content = escape(request.form["content"].strip())
+        user_id = session["user_id"]
 
         if len(content) < 5 or len(content) > 500:
             return render_template(
@@ -247,7 +257,7 @@ def place_reviews(place_id):
                 avg_rating=round(avg, 2),
                 error="후기 내용은 5자 이상 500자 이하로 입력해주세요."
             )
-    
+
         new = Review(
             place_id=place_id,
             user_id=user_id,
@@ -258,24 +268,13 @@ def place_reviews(place_id):
         db.session.commit()
         return redirect(url_for("place_reviews", place_id=place_id))
 
-    place = Place.query.get_or_404(place_id)
-    reviews = (
-        Review.query
-        .filter_by(place_id=place_id)
-        .order_by(Review.created_at.desc())
-        .all()
-    )
-    avg = (
-        db.session.query(db.func.avg(Review.rating))
-        .filter(Review.place_id==place_id)
-        .scalar()
-    ) or 0
     return render_template(
         "reviews.html",
         place=place,
         reviews=reviews,
         avg_rating=round(avg, 2)
     )
+
 
 @application.route(
     "/reviews/<int:review_id>/edit", methods=["GET", "POST"]
