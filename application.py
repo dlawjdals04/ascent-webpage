@@ -276,26 +276,22 @@ def place_reviews(place_id):
     )
 
 
-@application.route(
-    "/reviews/<int:review_id>/edit", methods=["GET", "POST"]
-)
+@application.route("/reviews/<int:review_id>/edit", methods=["GET", "POST"])
 @login_required
 def edit_review(review_id):
     review = Review.query.get_or_404(review_id)
+
     if review.user_id != session["user_id"]:
         return "권한이 없습니다.", 403
 
     if request.method == "POST":
-        review.rating     = float(request.form["rating"])
-        review.content    = request.form["content"]
+        review.rating = float(request.form["rating"])
+        review.content = escape(request.form["content"].strip())
         review.updated_at = datetime.now()
         db.session.commit()
-        return redirect(
-            url_for("place_reviews", place_id=review.place_id)
-        )
-    
-    place = review.place
+        return redirect(url_for("place_reviews", place_id=review.place_id))
 
+    place = review.place
     reviews = (
         Review.query
         .filter_by(place_id=place.place_id)
@@ -310,10 +306,11 @@ def edit_review(review_id):
 
     return render_template(
         "reviews.html",
-        review=review,
         place=place,
         reviews=reviews,
-        avg_rating=round(avg, 2)
+        avg_rating=round(avg, 2),
+        review=review,  # 수정 중인 리뷰 정보를 넘김
+        editing=True    # 수정 모드 여부를 템플릿에 알려줌
     )
 
 
