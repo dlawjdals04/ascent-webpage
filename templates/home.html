@@ -52,12 +52,15 @@
       <!-- 로그인 안 된 상태 → 로그인 박스 -->
       <div class="box" id="loginBox">
         <h2>로그인</h2>
-        {% if error %}
-          <p class="error">{{ error|safe }}</p>
-        {% endif %}
+        
         <form method="post" action="{{ url_for('login') }}">
           <input type="text" name="loginId" placeholder="아이디">
           <input type="password" name="loginPw" placeholder="비밀번호">
+
+          {% if error %}
+            <li><p class="error">{{ error|safe }}</p></li>
+          {% endif %}
+
           <button type="submit">로그인</button>
         </form>
         <a href="{{ url_for('signup') }}">회원가입</a>
