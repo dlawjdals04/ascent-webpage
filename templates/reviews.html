@@ -35,6 +35,12 @@
     <br>
     <label for="content">내용:</label><br>
     <textarea name="content" id="content" rows="4" cols="50" required></textarea><br>
+    {% if error %}
+    <ul class="error-list", ul style="color: red;">
+      <li><p class="error">{{ error }}</p></li>
+    </ul>
+    {% endif %}
+
     <button type="submit">등록</button>
     <hr style="margin: 40px 0;">  
   </form>

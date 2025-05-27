@@ -239,9 +239,14 @@ def place_reviews(place_id):
 
         content = escape(content.strip())
 
-        if len(content) < 5 or len(content)> 500:
-         return "후기 내용은 5자 이상 500자 이하로 입력해주세요.", 400
-
+        if len(content) < 5 or len(content) > 500:
+            return render_template(
+                "reviews.html",
+                place=place,
+                reviews=reviews,
+                avg_rating=round(avg, 2),
+                error="후기 내용은 5자 이상 500자 이하로 입력해주세요."
+            )
     
         new = Review(
             place_id=place_id,
