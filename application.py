@@ -293,25 +293,15 @@ def edit_review(review_id):
         return redirect(
             url_for("place_reviews", place_id=review.place_id)
         )
-
-    return render_template("reviews.html", review=review)
-
-@application.route("/reviews/<int:review_id>/delete")
-@login_required
-def delete_review(review_id):
-    review = Review.query.get_or_404(review_id)
-    if review.user_id != session["user_id"]:
-        return "권한이 없습니다.", 403
-    place_id = review.place_id
-    db.session.delete(review)
-    db.session.commit()
+    
     place = review.place
+
     reviews = (
         Review.query
         .filter_by(place_id=place.place_id)
         .order_by(Review.created_at.desc())
         .all()
-        )
+    )
     avg = (
         db.session.query(db.func.avg(Review.rating))
         .filter(Review.place_id == place.place_id)
@@ -325,6 +315,19 @@ def delete_review(review_id):
         reviews=reviews,
         avg_rating=round(avg, 2)
     )
+
+
+@application.route("/reviews/<int:review_id>/delete")
+@login_required
+def delete_review(review_id):
+    review = Review.query.get_or_404(review_id)
+    if review.user_id != session["user_id"]:
+        return "권한이 없습니다.", 403
+    place_id = review.place_id
+    db.session.delete(review)
+    db.session.commit()
+    
+    return redirect(url_for("place_reviews", place_id=place_id))
 
 if __name__ == "__main__":
     with application.app_context():
