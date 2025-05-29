@@ -54,12 +54,11 @@
         <p>
           <strong>{{ r.user.username }}</strong>
           <span>· {{ r.created_at.strftime("%Y-%m-%d") }}</span>
-          {% if review.updated_at %}
-            <p>수정됨: {{ review.updated_at.strftime('%Y-%m-%d %H:%M') }}</p>
-          {% else %}
-            <p>작성일: {{ review.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+          <span>· {{ r.created_at.strftime("%Y-%m-%d") }}
+          {% if r.updated_at and r.updated_at != r.created_at %}
+            (수정됨)
           {% endif %}
-
+          </span>
         </p>
         <p>별점: <span class="star">{{ "%.1f"|format(r.rating) }}</span></p>
         <p>{{ r.content }}</p>
