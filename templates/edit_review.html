@@ -1,5 +1,7 @@
 <!-- templates/edit_review.html -->
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <h1>후기 수정</h1>
+
 <form method="post">
   <label for="rating">별점:</label>
   <input type="number" name="rating" id="rating" step="0.5" min="0" max="5" value="{{ review.rating }}" required><br>
