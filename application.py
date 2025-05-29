@@ -292,26 +292,12 @@ def edit_review(review_id):
         return redirect(url_for("place_reviews", place_id=review.place_id))
 
     place = review.place
-    reviews = (
-        Review.query
-        .filter_by(place_id=place.place_id)
-        .order_by(Review.created_at.desc())
-        .all()
-    )
-    avg = (
-        db.session.query(db.func.avg(Review.rating))
-        .filter(Review.place_id == place.place_id)
-        .scalar()
-    ) or 0
-
     return render_template(
-        "reviews.html",
+        "edit_review.html",  # ✅ 이 부분이 핵심
         place=place,
-        reviews=reviews,
-        avg_rating=round(avg, 2),
-        review=review,  # 수정 중인 리뷰 정보를 넘김
-        editing=True    # 수정 모드 여부를 템플릿에 알려줌
+        review=review
     )
+
 
 
 @application.route("/reviews/<int:review_id>/delete")
