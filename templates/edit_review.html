@@ -1,0 +1,11 @@
+<!-- templates/edit_review.html -->
+<h1>후기 수정</h1>
+<form method="post">
+  <label for="rating">별점:</label>
+  <input type="number" name="rating" id="rating" step="0.5" min="0" max="5" value="{{ review.rating }}" required><br>
+
+  <label for="content">내용:</label><br>
+  <textarea name="content" id="content" rows="4" cols="50" required>{{ review.content }}</textarea><br>
+
+  <button type="submit">수정 완료</button>
+</form>
