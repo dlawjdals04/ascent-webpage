@@ -287,9 +287,20 @@ def edit_review(review_id):
     if request.method == "POST":
         review.rating = float(request.form["rating"])
         review.content = escape(request.form["content"].strip())
+        if len(content) < 5 or len(content) > 500:
+            return render_template(
+                "reviews.html",
+                place=place,
+                reviews=reviews,
+                avg_rating=round(avg, 2),
+                error="후기 내용은 5자 이상 500자 이하로 입력해주세요."
+            )
+    
         review.updated_at = datetime.now()
         db.session.commit()
         return redirect(url_for("place_reviews", place_id=review.place_id))
+        
+   
 
     place = review.place
     return render_template(
